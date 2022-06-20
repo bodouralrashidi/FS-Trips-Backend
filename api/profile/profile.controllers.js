@@ -29,8 +29,9 @@ exports.getProfileId = async (req, res, next) => {
   };
     exports.createProfile = async (req, res, next) => {
       const {userId} = req.params
+      console.log(userId)
       try {
-          const newProfile = await  Profile.findByIdAndUpdate(userId, req.body);
+          const newProfile = await  User.findByIdAndUpdate(userId, { profile: req.body });
           console.log(newProfile)
           res.status(201).json(newProfile);
       } catch (error) {

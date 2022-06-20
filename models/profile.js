@@ -6,10 +6,10 @@ mongoose.plugin(slug);
 const ProfileSchema = new mongoose.Schema({
   image: String,
   bio : String,
-  userId: 
+  user_id: 
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: "User",
     },
   slug: { type: String, slug: "name" }
 });
