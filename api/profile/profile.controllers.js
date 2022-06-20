@@ -1,6 +1,7 @@
 const Profile  = require("../../models/profile")
 
-exports.getProfileId = async (profileId, next) => {
+exports.getProfileId = async (req, res, next) => {
+  const { profileId } = req.params;
     try {
       const profile = await Profile.findById(profileId);
       return profile;
@@ -8,6 +9,7 @@ exports.getProfileId = async (profileId, next) => {
       next(error);
     }
   };
+  
   exports.getProfiles = async (req, res, next) => {
     try {
       const profiles = await Profile.find()
@@ -25,11 +27,13 @@ exports.getProfileId = async (profileId, next) => {
       next(error);
     }
   };
-  exports.createProfile = async (req, res, next) => {
-    try {
-        const newProfile = await Profile.create(req.body);
-        res.status(201).json(newProfile);
-    } catch (error) {
-        next(error);
-    }
-  };
+    exports.createProfile = async (req, res, next) => {
+      const {userId} = req.params
+      try {
+          const newProfile = await  Profile.findByIdAndUpdate(userId, req.body);
+          console.log(newProfile)
+          res.status(201).json(newProfile);
+      } catch (error) {
+          next(error);
+      }
+    };

@@ -43,3 +43,15 @@ exports.getUsers = async (req, res) => {
     res.status(500).json("Server Error");
   }
 };
+
+exports.getUserInfo = async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    const foundUser = await User.findById(userId);
+    return foundUser;
+  } catch (error) {
+    next(error);
+  }
+};
+
+

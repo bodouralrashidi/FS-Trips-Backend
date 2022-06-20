@@ -24,6 +24,6 @@ router.param("profileId", async (req, res, next, profileId) => {
 router.get("/profiles", getProfiles);
 router.get("/:profileId", getProfileId);
 router.put("/:profileId", updateProfile);
-router.post("/profiles", createProfile);
+router.put("/:userId/profiles", createProfile);
 
 module.exports = router;

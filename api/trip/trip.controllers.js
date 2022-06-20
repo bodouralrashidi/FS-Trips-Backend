@@ -1,5 +1,5 @@
 const Trip = require("../../models/Trip");
-
+const User = require ("../../models/User")
 // status codes
 const OK = 200;
 const CREATED = 201;
@@ -24,6 +24,20 @@ exports.newTrip = async (req, res, next) => {
   if (error) return next(error);
   res.status(CREATED).json(createdTrip);
 };
+
+exports.newTripTest = async (req, res, next) => {
+  const newTrip = parseBodyToTrip(req.body);
+  try {
+      newTrip = await Trip.create(newTrip);
+    await User.findByIdAndUpdate(req.user._id, {
+      $push: { trips: newTrip._id},
+    });
+    res.status(201).json(newTrip);
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 exports.updateTrip = async (req, res, next) => {
   const { tripId } = req.params;
