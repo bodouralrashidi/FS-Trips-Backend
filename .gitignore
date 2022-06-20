@@ -106,3 +106,6 @@ dist
 
 # secret configs
 .env
+
+# mac file
+.DS_Store
