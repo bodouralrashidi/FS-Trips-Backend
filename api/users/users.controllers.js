@@ -12,7 +12,6 @@ exports.signin = async (req, res) => {
     };
     const token = jwt.sign(payload, keys.JWT_SECRET);
     res.status(200).json(token);
-    console.log(token)
   } catch (err) {
     res.status(500).json("Server Error");
   }
