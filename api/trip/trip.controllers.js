@@ -1,4 +1,5 @@
 const Trip = require("../../models/Trip");
+const User = require("../../models/User");
 
 // status codes
 const OK = 200;
@@ -19,9 +20,20 @@ exports.tripById = async (req, res, next) => {
 };
 
 exports.newTrip = async (req, res, next) => {
+  // create trip
   const newTrip = parseBodyToTrip(req.body);
-  const [createdTrip, error] = await tryCatch(() => Trip.create(newTrip));
-  if (error) return next(error);
+  const [createdTrip, tripError] = await tryCatch(() => Trip.create(newTrip));
+  if (tripError) return next(tripError);
+
+  // update user trips
+  const { userId } = newTrip;
+  const [response, userError] = await tryCatch(() =>
+    User.findByIdAndUpdate(userId, {
+      $push: { trips: createdTrip._id },
+    })
+  );
+  if (userError) return next(userError);
+
   res.status(CREATED).json(createdTrip);
 };
 
@@ -55,6 +67,6 @@ async function tryCatch(promise) {
 }
 
 function parseBodyToTrip(reqBody) {
-  const { title, description, image, location } = reqBody;
-  return { title, description, image, location };
+  const { userId, title, description, image, location } = reqBody;
+  return { userId, title, description, image, location };
 }
