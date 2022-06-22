@@ -50,10 +50,17 @@ exports.updateTrip = async (req, res, next) => {
 
 exports.deleteTrip = async (req, res, next) => {
   const { tripId } = req.params;
-  const [response, error] = await tryCatch(() =>
+
+  const [tripResponse, tripError] = await tryCatch(() =>
     Trip.findByIdAndDelete(tripId)
   );
-  if (error) return next(error);
+  if (tripError) return next(tripError);
+
+  const [userResponse, userError] = await tryCatch(() =>
+    User.findOneAndUpdate({ trips: tripId }, { $pull: { trips: tripId } })
+  );
+  if (userError) return next(userError);
+
   res.status(NO_CONTENT).end();
 };
 
