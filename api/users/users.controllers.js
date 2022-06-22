@@ -39,11 +39,36 @@ exports.signup = async (req, res) => {
   }
 };
 
+
 exports.getUsers = async (req, res) => {
   try {
     const users = await User.find().populate('profile')
     res.status(201).json(users);
   } catch (err) {
     res.status(500).json("Server Error");
+  }
+};
+
+exports.updateUser= async (req, res, next) => {
+  try {
+  const { userId } = req.params;
+   const founduser =  await User.findById(userId);
+   console.log(founduser)
+   founduser.set({Fname:req.body.Fname, Lname:req.body.Lname});
+await founduser.save();
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+};
+exports.getUserId = async (req, res, next) => {
+  console.log("get user id")
+  const { userId } = req.params;
+  try {
+    const user = await User.findById(userId).populate("trips");
+    console.log(user, "the user is found")
+    res.status(201).json(user);
+  } catch (error) {
+    next(error);
   }
 };
