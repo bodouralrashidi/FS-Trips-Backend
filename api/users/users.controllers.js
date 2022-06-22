@@ -1,4 +1,5 @@
 const User = require("../../models/User");
+const Profile = require("../../models/profile");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
@@ -12,7 +13,6 @@ exports.signin = async (req, res) => {
     };
     const token = jwt.sign(payload, keys.JWT_SECRET);
     res.status(200).json(token);
-    console.log(token)
   } catch (err) {
     res.status(500).json("Server Error");
   }
@@ -23,6 +23,10 @@ exports.signup = async (req, res) => {
     const hashPassword = await bcrypt.hash(req.body.password, 5);
     req.body.password = hashPassword;
     const newUser = await User.create(req.body);
+    const newProfile = await Profile.create({ userId : newUser._id});
+    await User.findByIdAndUpdate(newUser, {
+        $push: { profile: newProfile._id }, 
+    });
     const payload = {
       _id: newUser._id,
       username: newUser.username,
@@ -35,11 +39,25 @@ exports.signup = async (req, res) => {
   }
 };
 
+
 exports.getUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find().populate('profile')
     res.status(201).json(users);
   } catch (err) {
     res.status(500).json("Server Error");
+  }
+};
+
+exports.updateUser= async (req, res, next) => {
+  try {
+  const { userId } = req.params;
+   const founduser =  await User.findById(userId);
+   console.log(founduser)
+   founduser.set({Fname:req.body.Fname, Lname:req.body.Lname});
+await founduser.save();
+    res.status(204).end();
+  } catch (error) {
+    next(error);
   }
 };
