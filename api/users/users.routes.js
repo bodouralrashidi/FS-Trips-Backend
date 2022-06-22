@@ -2,7 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 
-const { signup, signin, getUsers, updateUser } = require("./users.controllers");
+const { signup, signin, getUsers, updateUser , getUserId} = require("./users.controllers");
 
 router.post("/signup", signup);
 router.post("/signin",
@@ -11,5 +11,5 @@ router.post("/signin",
 );
 router.get("/users", getUsers);
 router.put("/user/:userId", updateUser);
-
+router.get("/:userId", getUserId);
 module.exports = router;

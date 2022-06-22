@@ -61,3 +61,14 @@ await founduser.save();
     next(error);
   }
 };
+exports.getUserId = async (req, res, next) => {
+  console.log("get user id")
+  const { userId } = req.params;
+  try {
+    const user = await User.findById(userId).populate("trips");
+    console.log(user, "the user is found")
+    res.status(201).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
