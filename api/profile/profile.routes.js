@@ -7,6 +7,7 @@ const {
   getProfiles,
   updateProfile,
   createProfile,
+  getProfileByUserId,
 } = require("./profile.controllers");
 
 router.param("profileId", async (req, res, next, profileId) => {
@@ -23,6 +24,7 @@ router.param("profileId", async (req, res, next, profileId) => {
 
 router.get("/profiles", getProfiles);
 router.get("/:profileId", getProfileId);
+router.get("/user-profile/:userId", getProfileByUserId);
 router.put("/:userId", updateProfile);
 router.post("/profiles", createProfile);
 
