@@ -10,14 +10,7 @@ const TripSchema = new mongoose.Schema({
   description: String,
   image: String,
   location: String,
-  //   list: [{
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "List",
-  //   }],
-  //   QA: [{
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "QA",
-  //   }]
+  favourite: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("Trip", TripSchema);

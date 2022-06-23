@@ -74,6 +74,6 @@ async function tryCatch(promise) {
 }
 
 function parseBodyToTrip(reqBody) {
-  const { userId, title, description, image, location } = reqBody;
-  return { userId, title, description, image, location };
+  const { userId, title, description, image, location, favourite } = reqBody;
+  return { userId, title, description, image, location, favourite };
 }
